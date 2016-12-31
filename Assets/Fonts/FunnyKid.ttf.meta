@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: abf7272f10b680848904fdfcc61c7edc
+timeCreated: 1483143025
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: FunnyKid
+  fontNames:
+  - FunnyKid
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
