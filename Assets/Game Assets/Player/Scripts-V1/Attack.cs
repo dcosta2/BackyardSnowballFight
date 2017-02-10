@@ -33,7 +33,7 @@ public class Attack : MonoBehaviour {
 	public void LaunchSnowball () {
 		GameObject snowball = Instantiate(snowballPrefab, snowballLaunchPoint.transform.position, snowballLaunchPoint.transform.rotation) as GameObject;
 		Rigidbody snowballRigidBody = snowball.GetComponent<Rigidbody>();
-		snowballRigidBody.velocity = snowballLaunchPoint.transform.TransformDirection(new Vector3 (0, 3, 15));
+		snowballRigidBody.velocity = snowballLaunchPoint.transform.TransformDirection(new Vector3 (0, 1, 15));
 		audioSource.clip = snowballthrowingsound;
 		audioSource.Play();
 
