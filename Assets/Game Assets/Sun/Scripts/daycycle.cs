@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class daycycle : MonoBehaviour {
+
+	public float speed;
+
 
 	// Use this for initialization
 	void Start () {
@@ -11,6 +14,6 @@ public class CameraController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		transform.RotateAround(transform.position, Vector3.left, Time.deltaTime * speed);
 	}
 }
