@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{2BBC8487-C283-01E9-876C-C7CF7D2D3D14}") = "Backyard Snowball Fight Version 0.1.002", "Assembly-CSharp-firstpass.csproj", "{467057A5-76D7-3D5E-73F1-B77C904FDF0A}"
+EndProject
+Project("{2BBC8487-C283-01E9-876C-C7CF7D2D3D14}") = "Backyard Snowball Fight Version 0.1.002", "Assembly-CSharp.csproj", "{57A6FC21-28C3-A9B5-BDE4-DF10BD27E2DB}"
+EndProject
+Project("{2BBC8487-C283-01E9-876C-C7CF7D2D3D14}") = "Backyard Snowball Fight Version 0.1.002", "Assembly-CSharp-Editor-firstpass.csproj", "{4EEF8F9F-68F7-6D4C-500E-3359AA985111}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{467057A5-76D7-3D5E-73F1-B77C904FDF0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{467057A5-76D7-3D5E-73F1-B77C904FDF0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{467057A5-76D7-3D5E-73F1-B77C904FDF0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{467057A5-76D7-3D5E-73F1-B77C904FDF0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57A6FC21-28C3-A9B5-BDE4-DF10BD27E2DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57A6FC21-28C3-A9B5-BDE4-DF10BD27E2DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57A6FC21-28C3-A9B5-BDE4-DF10BD27E2DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57A6FC21-28C3-A9B5-BDE4-DF10BD27E2DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EEF8F9F-68F7-6D4C-500E-3359AA985111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEF8F9F-68F7-6D4C-500E-3359AA985111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEF8F9F-68F7-6D4C-500E-3359AA985111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEF8F9F-68F7-6D4C-500E-3359AA985111}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
