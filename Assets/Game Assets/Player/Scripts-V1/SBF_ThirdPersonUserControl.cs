@@ -34,6 +34,7 @@ namespace SBF.Player.ThirdPerson
 
 				GetComponentInChildren<Camera> ().enabled = true;
 				GetComponentInChildren<AudioListener> ().enabled = true;
+                GetComponentInChildren<Canvas>().enabled = false;
 			}
         }
 

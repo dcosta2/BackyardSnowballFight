@@ -33,16 +33,17 @@ public class Attack : NetworkBehaviour {
 	}
 
 	public void LaunchSnowball () {
-		CmdLaunchSnowball();
+		CmdLaunchSnowball(gameObject.GetComponent<NetworkIdentity>().netId.ToString());
 		audioSource.clip = snowballthrowingsound;
 		audioSource.Play();
 		m_Animator.ResetTrigger("ThrowSnowball"); 
 	}
 
 	[Command]
-	void CmdLaunchSnowball () {
+	void CmdLaunchSnowball (string throwing_player) {
 		GameObject snowball = Instantiate(snowballPrefab, snowballLaunchPoint.transform.position, snowballLaunchPoint.transform.rotation) as GameObject;
-		if (snowball != null) {
+        snowball.GetComponent<SnowBall>().throwingPlayer = throwing_player;
+        if (snowball != null) {
 			Rigidbody snowballRigidBody = snowball.GetComponent<Rigidbody> ();
 			snowballRigidBody.velocity = snowballLaunchPoint.transform.TransformDirection (new Vector3 (0, 1, 15));
 			NetworkServer.Spawn (snowball);
