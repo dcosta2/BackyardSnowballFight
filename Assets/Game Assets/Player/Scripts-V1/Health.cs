@@ -5,16 +5,21 @@ using System.Collections;
 
 public class Health : NetworkBehaviour {
 
-	public const int maxHealth = 100;
+    [SyncVar(hook = "OnChangeHealth")]
+    public int currentHealth = maxHealth;
+
+    public RectTransform healthBar;
+    public const int maxHealth = 100;
 
     private const float starting_width = 0.51f;
+    private PlayerUI playerUI;
 
-	[SyncVar(hook = "OnChangeHealth")]
-	public int currentHealth = maxHealth;
+    void Start()
+    {
+        playerUI = FindObjectOfType<PlayerUI>();
+    }
 
-	public RectTransform healthBar;
-
-	public void TakeDamage(int amount)
+    public void TakeDamage(int amount)
 	{
 		if (!isServer)
 			return;
@@ -30,5 +35,10 @@ public class Health : NetworkBehaviour {
 	void OnChangeHealth (int health)
 	{
 		healthBar.sizeDelta = new Vector2(health * starting_width, healthBar.sizeDelta.y);
+        if(isLocalPlayer)
+        {
+            Debug.Log("In isLocalPlayer Loop, trying to set health to" + health);
+            playerUI.SetPlayerHealth(health);
+        }
 	}
 }
