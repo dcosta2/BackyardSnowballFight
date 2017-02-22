@@ -14,26 +14,21 @@ public class Health : NetworkBehaviour {
     private const float starting_width = 0.51f;
     private PlayerUI playerUI;
 
+	private NetworkStartPosition[] spawnPoints;
+
     void Start()
     {
         playerUI = FindObjectOfType<PlayerUI>();
-    }
-
-<<<<<<< HEAD
-	private NetworkStartPosition[] spawnPoints;
-
-	void Start ()
-	{
-		if (isLocalPlayer)
+   
+				if (isLocalPlayer)
 		{
 			spawnPoints = FindObjectsOfType<NetworkStartPosition>();
 		}
 	}
 
 	public void TakeDamage(int amount)
-=======
-    public void TakeDamage(int amount)
->>>>>>> e9438edb38da03149f7d4cb9e671372c994e478b
+
+
 	{
 		if (!isServer)
 			return;

@@ -64,6 +64,7 @@
      <Compile Include="Assets\Menu System\Scripts\FadeIn.cs" />
      <Compile Include="Assets\Menu System\Scripts\OptionsController.cs" />
      <Compile Include="Assets\Menu System\Scripts\SplashPanel.cs" />
+     <Compile Include="Assets\PlayerUI.cs" />
      <Compile Include="Assets\_Managers\Scripts\LevelManager.cs" />
      <Compile Include="Assets\_Managers\Scripts\MusicManager.cs" />
      <Compile Include="Assets\_Managers\Scripts\PlayerPrefsManager.cs" />
