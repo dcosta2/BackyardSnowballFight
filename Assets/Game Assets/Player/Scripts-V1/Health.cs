@@ -16,6 +16,11 @@ public class Health : NetworkBehaviour {
 
 	private NetworkStartPosition[] spawnPoints;
 
+	[SyncVar]
+	public bool m_isDead = false;
+	public GameObject m_DeathPrefab;
+	public SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter m_lastAttacker;
+
     void Start()
     {
         playerUI = FindObjectOfType<PlayerUI>();
@@ -27,17 +32,25 @@ public class Health : NetworkBehaviour {
 	}
 
 	public void TakeDamage(int amount)
-
-
 	{
-		if (!isServer)
+		if (!isServer) {
 			return;
+		}
 
+		if (pc != null && pc != this.GetComponent<SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter> ()) {
+			m_lastAttacker = pc;
+		}
 		currentHealth -= amount;
-		if (currentHealth <= 0)
-		{
-			currentHealth = maxHealth;
 
+		if (currentHealth <= 0 && !m_isDead)
+		{
+			m_isDead = true;
+			if (m_lastAttacker != null) {
+				m_lastAttacker.m_score++;
+				m_lastAttacker = null;
+			}
+
+			GameManager.Instance.UpdateScoreboard ();
 			// called on the Server, but invoked on the Clients
 			RpcRespawn();
 		}

@@ -61,9 +61,11 @@
      <Compile Include="Assets\Game Assets\Snowball\Scripts-V2\SelfDestruct.cs" />
      <Compile Include="Assets\Game Assets\Snowball\Scripts-V2\SnowBall.cs" />
      <Compile Include="Assets\Game Assets\Sun\Scripts\daycycle.cs" />
+     <Compile Include="Assets\GameManager.cs" />
      <Compile Include="Assets\Menu System\Scripts\FadeIn.cs" />
      <Compile Include="Assets\Menu System\Scripts\OptionsController.cs" />
      <Compile Include="Assets\Menu System\Scripts\SplashPanel.cs" />
+     <Compile Include="Assets\PlayerSetup.cs" />
      <Compile Include="Assets\PlayerUI.cs" />
      <Compile Include="Assets\_Managers\Scripts\LevelManager.cs" />
      <Compile Include="Assets\_Managers\Scripts\MusicManager.cs" />
