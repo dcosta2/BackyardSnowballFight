@@ -31,7 +31,8 @@ public class Health : NetworkBehaviour {
 		}
 	}
 
-	public void TakeDamage(int amount)
+
+	public void TakeDamage(int amount, SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter pc = null)
 	{
 		if (!isServer) {
 			return;
