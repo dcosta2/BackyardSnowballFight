@@ -15,6 +15,8 @@ public class Health : NetworkBehaviour {
     private PlayerUI playerUI;
 
 	private NetworkStartPosition[] spawnPoints;
+	public bool m_isDead = false;
+	public SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter m_lastAttacker;
 
     void Start()
     {
@@ -34,10 +36,15 @@ public class Health : NetworkBehaviour {
 			return;
 
 		currentHealth -= amount;
-		if (currentHealth <= 0)
+		if (currentHealth <= 0 && !m_isDead)
 		{
 			currentHealth = maxHealth;
-
+			m_isDead = true;
+			if (m_lastAttacker != null) {
+				m_lastAttacker.m_score++;
+				m_lastAttacker = null;
+			}
+			GameManager.Instance.UpdateScoreboard();
 			// called on the Server, but invoked on the Clients
 			RpcRespawn();
 		}
