@@ -3,10 +3,13 @@ using UnityEngine.Networking;
 
 namespace SBF.Player.ThirdPerson
 {
+	[RequireComponent(typeof(PlayerSetup))]
 	[RequireComponent(typeof(Rigidbody))]
 	[RequireComponent(typeof(CapsuleCollider))]
 	[RequireComponent(typeof(Animator))]
-	public class SBF_ThirdPersonCharacter : MonoBehaviour
+	public class SBF_ThirdPersonCharacter : NetworkBehaviour
+
+
 	{
 		[SerializeField] float m_MovingTurnSpeed = 360;
 		[SerializeField] float m_StationaryTurnSpeed = 180;
@@ -17,6 +20,8 @@ namespace SBF.Player.ThirdPerson
 		//[SerializeField] float m_AnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
 
+		public int m_score;
+		public PlayerSetup m_pSetup;
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
 		bool m_IsGrounded;
@@ -32,6 +37,7 @@ namespace SBF.Player.ThirdPerson
 
 		void Start()
 		{
+			m_pSetup = GetComponent<PlayerSetup>();
 			m_Animator = GetComponent<Animator>();
 			m_Rigidbody = GetComponent<Rigidbody>();
 			m_Capsule = GetComponent<CapsuleCollider>();
