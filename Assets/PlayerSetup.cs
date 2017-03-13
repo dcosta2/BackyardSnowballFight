@@ -8,8 +8,9 @@ public class PlayerSetup : NetworkBehaviour {
 	[SyncVar(hook="UpdateColor")]
 	public Color m_playerColor = Color.blue;
 	public string m_basename = "PLAYER ";
+    public int m_score;
 
-	[SyncVar(hook="UpdateName")]
+    [SyncVar(hook="UpdateName")]
 	public int m_playerNum;
 	public Text m_playerNameText;
 
@@ -35,7 +36,7 @@ public class PlayerSetup : NetworkBehaviour {
 	}
 
 	void Update() {
-		//	UpdateName(m_playerNum);
+		UpdateName(m_playerNum);
 	}
 
 	public void UpdateColor (Color pColor)

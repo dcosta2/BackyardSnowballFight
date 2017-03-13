@@ -8,25 +8,29 @@ public class GameManager : NetworkBehaviour
 {
 
 	public Text m_messageText;
-	public int m_minPlayers = 1;
+    
+
+    public int m_minPlayers = 1;
 	public int m_maxPlayers = 4;
+    public float GameDuration;
 
-	[SyncVar]
+    [SyncVar]
 	public int m_playerCount = 0;
-
-	public Color[] m_playerColors = {Color.red, Color.blue, Color.green, Color.magenta};
-
+    
 	static private GameManager instance;
-	public List<SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter> m_allPlayers;
+	private List<PlayerSetup> m_allPlayers = new List<PlayerSetup>();
 
-	public List<Text> m_nameLabelText;
-	public List<Text> m_playerScoreText;
-	public int m_maxScore = 3;
+    private List<Text> m_nameLabelText;
+    private List<Text> m_playerScoreText;
+    private int m_maxScore = 3;
+    private PlayerUI playerUI;
+    private GameTimer timer;
 
-	[SyncVar]
+
+    [SyncVar]
 	bool m_gameOver = false;
 
-	SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter m_winner;
+	PlayerSetup m_winner;
 
 	static public GameManager Instance 
 	{		
@@ -57,6 +61,7 @@ public class GameManager : NetworkBehaviour
 
 	void Start() 
 	{
+        timer = GetComponent<GameTimer>();
 		StartCoroutine("GameLoopRoutine");
 	}
 
@@ -91,45 +96,54 @@ public class GameManager : NetworkBehaviour
 		UpdateMessage("Fight");
 		yield return new WaitForSeconds(1f);
 		UpdateMessage("");
-		EnablePlayers();
-		UpdateScoreboard();
+        EnablePlayers();
+        timer.SetTotalTime(GameDuration);
+        timer.StartTimer();
+		
+		//UpdateScoreboard();
 
-		m_winner = null;
-
-		while (m_gameOver == false) {
+		//m_winner = null;      
+        while ((m_gameOver == false) && (timer.gameOver == false)) {
 			yield return null;
 		}
+
+        m_gameOver = true;
 	}
 
 	IEnumerator EndGame ()
 	{
-		UpdateMessage("GAME OVER \n The Winner is: Player " + m_winner.m_pSetup.m_playerNum.ToString() + "!!");
+		UpdateMessage("GAME OVER \n The Winner is: Player " /*+ m_winner.m_pSetup.m_playerNum.ToString()*/ + "!!");
 		DisablePlayers();
-
-		yield return null;
+        Camera camera = GameObject.Find("LobbyCamera").GetComponent<Camera>();
+        camera.enabled = true;
+        yield return null;
 	}
 
 
 	void SetPlayerState(bool state) {
-		SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter[] allPlayers = GameObject.FindObjectsOfType<SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter>();
-		foreach (SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter p in allPlayers) {
-			p.enabled = state;
-		}
+		SBF.Player.ThirdPerson.SBF_ThirdPersonUserControl[] allPlayers = GameObject.FindObjectsOfType<SBF.Player.ThirdPerson.SBF_ThirdPersonUserControl>();
+		foreach (SBF.Player.ThirdPerson.SBF_ThirdPersonUserControl player in allPlayers) {
+			player.enabled = state;
+            player.gameObject.SetActive(state);
+        }
 	}
 
 	void EnablePlayers() {
 		SetPlayerState(true);
+        if (playerUI == null) { playerUI = FindObjectOfType<PlayerUI>(); }
+        playerUI.gameObject.SetActive(true);
 	}
 
 	void DisablePlayers() {
-		SetPlayerState(false);
-	}
+		//SetPlayerState(false);
+        if (playerUI == null) { playerUI = FindObjectOfType<PlayerUI>(); }
+        playerUI.gameObject.SetActive(false);
+    }
 
 	public void AddPlayer(PlayerSetup pSetup)
 	{
-		if(m_playerCount < m_maxPlayers) {
-			m_allPlayers.Add(pSetup.GetComponent<SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter>());
-			pSetup.m_playerColor = m_playerColors[m_playerCount];
+		if((m_playerCount < m_maxPlayers) && (pSetup != null)) {
+			m_allPlayers.Add(pSetup);
 			pSetup.m_playerNum = m_playerCount + 1;
 		}
 	}
@@ -158,14 +172,14 @@ public class GameManager : NetworkBehaviour
 			string[] names = new string[m_playerCount];
 			int[] scores = new int[m_playerCount];
 			for (int i=0; i<m_playerCount; i++) {
-				names[i] = m_allPlayers[i].GetComponent<PlayerSetup>().m_playerNameText.text;
+				names[i] = m_allPlayers[i].m_playerNameText.text;
 				scores[i] = m_allPlayers[i].m_score;
 			}
 			RpcUpdatesScoreBoard(names, scores);
 		}
 	}
 
-	public SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter GetWinner() {
+	public PlayerSetup GetWinner() {
 		if (isServer) {
 			for (int i=0; i< m_playerCount; i++) {
 				if (m_allPlayers[i].m_score >= m_maxScore) {
