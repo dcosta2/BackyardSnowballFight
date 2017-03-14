@@ -10,6 +10,7 @@ public class Attack : NetworkBehaviour {
 	public AudioClip snowballthrowingsound;
 
 	private AudioSource audioSource;
+    private PlayerSetup pSetup;
 
 	// Part of Test Code Solution
 	// Part of Test Code Solution
@@ -27,8 +28,10 @@ public class Attack : NetworkBehaviour {
 
 		m_Animator = GetComponent<Animator>();
 
-		// Part of Test Code Solution
-		// Part of Test Code Solution
+        // Part of Test Code Solution
+        // Part of Test Code Solution
+
+        pSetup = FindObjectOfType<PlayerSetup>();
 
 	}
 
@@ -36,14 +39,14 @@ public class Attack : NetworkBehaviour {
         Vector3 launchPoint = snowballLaunchPoint.transform.position;
         Vector3 projectileVelocity = snowballPrefab.GetComponent<Projectile>().projectileVelocity;
         Vector3 velocity = snowballLaunchPoint.transform.TransformDirection(projectileVelocity);
-        CmdLaunchSnowball(gameObject.GetComponent<NetworkIdentity>().netId.ToString(), launchPoint, velocity);
+        CmdLaunchSnowball(pSetup.m_playerNum, launchPoint, velocity);
 		audioSource.clip = snowballthrowingsound;
 		audioSource.Play();
 		m_Animator.ResetTrigger("ThrowSnowball"); 
 	}
 
 	[Command]
-	void CmdLaunchSnowball (string throwing_player, Vector3 launchPoint, Vector3 velocity) {
+	void CmdLaunchSnowball (int throwing_player, Vector3 launchPoint, Vector3 velocity) {
 		GameObject snowball = Instantiate(snowballPrefab, launchPoint, snowballLaunchPoint.transform.rotation) as GameObject;
         snowball.GetComponent<SnowBall>().owner = throwing_player;
         if (snowball != null) {

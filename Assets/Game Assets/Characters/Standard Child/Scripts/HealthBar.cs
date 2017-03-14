@@ -15,9 +15,9 @@ public class HealthBar : MonoBehaviour {
 
     private void Update()
     {
-        if (h_target.gameObject.name != "FollowCamera") {
+        //if (h_target.gameObject.name != "FollowCamera") {
             findActiveCamera();
-        }
+        //}
     }
 
     private void findActiveCamera()
@@ -35,8 +35,10 @@ public class HealthBar : MonoBehaviour {
     void LateUpdate()
     {
         // Rotate the canvas every frame so it keeps looking at the target 
-
-        float eulerYAngle = Mathf.SmoothDampAngle(transform.rotation.eulerAngles.y, h_target.eulerAngles.y, ref rotateVel, m_lookSmooth);
-        transform.rotation = Quaternion.Euler(transform.eulerAngles.x, eulerYAngle, 0);
+        if (h_target)
+        {
+            float eulerYAngle = Mathf.SmoothDampAngle(transform.rotation.eulerAngles.y, h_target.eulerAngles.y, ref rotateVel, m_lookSmooth);
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, eulerYAngle, 0);
+        }
     }
 }

@@ -7,30 +7,31 @@ using UnityEngine.Networking;
 public class GameManager : NetworkBehaviour 
 {
 
-	public Text m_messageText;
     
-
     public int m_minPlayers = 1;
-	public int m_maxPlayers = 4;
-    public float GameDuration;
+    public float GameDuration = 120;
+    public int m_maxScore = 200;
+
+    public Text m_messageText;
+    public List<Text> m_nameLabelText;
+    public List<Text> m_playerScoreText;
 
     [SyncVar]
 	public int m_playerCount = 0;
-    
-	static private GameManager instance;
-	private List<PlayerSetup> m_allPlayers = new List<PlayerSetup>();
 
-    private List<Text> m_nameLabelText;
-    private List<Text> m_playerScoreText;
-    private int m_maxScore = 3;
+    static private GameManager instance;
+    private int m_maxPlayers = 4;
+    private List<PlayerSetup> m_allPlayers = new List<PlayerSetup>();
     private PlayerUI playerUI;
     private GameTimer timer;
 
 
     [SyncVar]
 	bool m_gameOver = false;
+    [SyncVar]
+    bool gameStarted = false;
 
-	PlayerSetup m_winner;
+    PlayerSetup m_winner;
 
 	static public GameManager Instance 
 	{		
@@ -74,37 +75,43 @@ public class GameManager : NetworkBehaviour
 
 	IEnumerator EnterLobby ()
 	{
-		DisablePlayers();
-		while (m_playerCount < m_minPlayers){
+        Camera camera = GameObject.Find("LobbyCamera").GetComponent<Camera>();
+        camera.enabled = true;
+        DisablePlayers();
+		while ((m_playerCount < m_minPlayers) && (!gameStarted)){
 			UpdateMessage("Waiting for Players");
 			DisablePlayers();
 			yield return null;
 		}
-		DisablePlayers();
+        
+        DisablePlayers();
 	}
 
 	IEnumerator PlayGame ()
 	{
-		UpdateMessage("Get Ready to Rumble");
-		yield return new WaitForSeconds(2f);
-		UpdateMessage("3");
-		yield return new WaitForSeconds(1f);
-		UpdateMessage("2");
-		yield return new WaitForSeconds(1f);
-		UpdateMessage("1");
-		yield return new WaitForSeconds(1f);
-		UpdateMessage("Fight");
-		yield return new WaitForSeconds(1f);
-		UpdateMessage("");
-        EnablePlayers();
-        timer.SetTotalTime(GameDuration);
-        timer.StartTimer();
-		
-		//UpdateScoreboard();
+        if (!gameStarted)
+        {
+            UpdateMessage("Get Ready to Rumble");
+            yield return new WaitForSeconds(2f);
+            UpdateMessage("3");
+            yield return new WaitForSeconds(1f);
+            UpdateMessage("2");
+            yield return new WaitForSeconds(1f);
+            UpdateMessage("1");
+            yield return new WaitForSeconds(1f);
+            UpdateMessage("Fight");
+            yield return new WaitForSeconds(1f);
+            UpdateMessage("");
+            timer.SetTotalTime(GameDuration);
+            timer.StartTimer();
+            gameStarted = true;
+        }
 
-		//m_winner = null;      
+        EnablePlayers();
+        m_winner = null;      
         while ((m_gameOver == false) && (timer.gameOver == false)) {
-			yield return null;
+            UpdateScoreboard();
+            yield return null;
 		}
 
         m_gameOver = true;
@@ -112,10 +119,11 @@ public class GameManager : NetworkBehaviour
 
 	IEnumerator EndGame ()
 	{
-		UpdateMessage("GAME OVER \n The Winner is: Player " /*+ m_winner.m_pSetup.m_playerNum.ToString()*/ + "!!");
-		DisablePlayers();
+		UpdateMessage("GAME OVER \n The Winner is: Player " + m_winner.m_playerNum.ToString() + "!!");
         Camera camera = GameObject.Find("LobbyCamera").GetComponent<Camera>();
         camera.enabled = true;
+        gameStarted = false;
+        DisablePlayers();
         yield return null;
 	}
 
@@ -124,9 +132,13 @@ public class GameManager : NetworkBehaviour
 		SBF.Player.ThirdPerson.SBF_ThirdPersonUserControl[] allPlayers = GameObject.FindObjectsOfType<SBF.Player.ThirdPerson.SBF_ThirdPersonUserControl>();
 		foreach (SBF.Player.ThirdPerson.SBF_ThirdPersonUserControl player in allPlayers) {
 			player.enabled = state;
-            player.gameObject.SetActive(state);
         }
-	}
+        SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter[] allcharacter = GameObject.FindObjectsOfType<SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter>();
+        foreach (SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter charater in allcharacter)
+        {
+            charater.enabled = state;
+        }
+    }
 
 	void EnablePlayers() {
 		SetPlayerState(true);
@@ -135,7 +147,7 @@ public class GameManager : NetworkBehaviour
 	}
 
 	void DisablePlayers() {
-		//SetPlayerState(false);
+		SetPlayerState(false);
         if (playerUI == null) { playerUI = FindObjectOfType<PlayerUI>(); }
         playerUI.gameObject.SetActive(false);
     }
@@ -204,4 +216,26 @@ public class GameManager : NetworkBehaviour
 			RpcUpdateMessage(msg);
 		}
 	}
+
+    public int PlayerSetupToNumber (PlayerSetup pSetup)
+    {
+        for (int i=0; i< m_playerCount; i++)
+        {
+            if (m_allPlayers[i] = pSetup) { return i; }
+        }
+        return 5;
+    }
+
+    public PlayerSetup NumberToPlayerSetup (int i)
+    {
+        if (i <= m_playerCount)
+        {
+            return m_allPlayers[i];
+        } else
+        {
+            Debug.Log("Error: NumberToPlayerSetup is attemptting to retrieve a PlayerSetup that isn't in m_allPlayers");
+            return m_allPlayers[0];
+        }
+             
+    }
 }

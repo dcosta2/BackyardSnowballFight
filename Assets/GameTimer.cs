@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class GameTimer : NetworkBehaviour {
 
-    [SyncVar]
+    [SyncVar(hook = "OnChangeTime")]
     public float currentTime;
     [SyncVar]
     public bool gameOver = false;
@@ -24,17 +24,25 @@ public class GameTimer : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (gameStarted) {
-            currentTime -= Time.deltaTime;
-            if (currentTime > 0 && !gameOver) {
-                SetTime(currentTime);
-            } else {
-                SetTimeText("Game Over");
-                text.color = Color.red;
-                gameOver = true;
-                gameStarted = false;
+            if (isServer)
+            {
+                currentTime -= Time.deltaTime;
             }
         }
 	}
+
+    void OnChangeTime (float ctime) {
+        if (ctime > 0)
+        {
+            SetTime(ctime);
+        } else
+        {
+            SetTimeText("Game Over");
+            text.color = Color.red;
+            gameOver = true;
+            gameStarted = false;
+        }
+    }
 
     public void SetTotalTime (float time) {
         currentTime = time;

@@ -30,24 +30,25 @@ public class Health : NetworkBehaviour {
 	}
 
 
-	public void TakeDamage(int amount, SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter pc = null)
+	public void TakeDamage(int amount)
 	{
 		if (!isServer) {
 			return;
 		}
-
+        /*
 		if (pc != null && pc != this.GetComponent<SBF.Player.ThirdPerson.SBF_ThirdPersonCharacter> ()) {
 			m_lastAttacker = pc;
-		}
+		} */
+
 		currentHealth -= amount;
 
 		if (currentHealth <= 0 && !m_isDead)
 		{
 			m_isDead = true;
-			if (m_lastAttacker != null) {
+			/* if (m_lastAttacker != null) {
 				m_lastAttacker.m_score++;
 				m_lastAttacker = null;
-			}
+			} */
 
 			GameManager.Instance.UpdateScoreboard ();
 			// called on the Server, but invoked on the Clients
@@ -80,6 +81,8 @@ public class Health : NetworkBehaviour {
 
 			// Set the player’s position to the chosen spawn point
 			transform.position = spawnPoint;
-		}
+            currentHealth = maxHealth;
+            m_isDead = false;
+        }
 	}
 }

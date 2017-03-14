@@ -6,13 +6,15 @@ using UnityEngine.Networking;
 public class SnowBall : NetworkBehaviour {
 
     public GameObject BrokenSnowball;
-    public string owner;
+    public int owner;
 
     private Projectile projectile;
+    private GameManager gameManager;
 
     public void Start()
     {
         projectile = GetComponent<Projectile>();
+        gameManager = FindObjectOfType<GameManager>();
     }
  
 	void OnCollisionEnter(Collision coll){
@@ -22,7 +24,7 @@ public class SnowBall : NetworkBehaviour {
 			Destroy(gameObject);
 		} else
         {
-            string hitPlayer = coll.gameObject.GetComponent<NetworkIdentity>().netId.ToString();
+            int hitPlayer = coll.gameObject.GetComponent<PlayerSetup>().m_playerNum;
             if (hitPlayer == owner)
             {
                 Debug.Log("Stop Hitting yourself!");
@@ -31,6 +33,7 @@ public class SnowBall : NetworkBehaviour {
                 gameObject.SetActive(false);
                 Instantiate(BrokenSnowball, gameObject.transform.position, Quaternion.identity);
                 Destroy(gameObject);
+                gameManager.NumberToPlayerSetup(owner-1).m_score += projectile.damage;
                 projectile.DealDamage(coll);
             }
         }
