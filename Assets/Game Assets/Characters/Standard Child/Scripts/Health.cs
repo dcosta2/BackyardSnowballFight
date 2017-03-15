@@ -68,7 +68,8 @@ public class Health : NetworkBehaviour {
 	[ClientRpc]
 	void RpcRespawn()
 	{
-		if (isLocalPlayer)
+        currentHealth = maxHealth;
+        if (isLocalPlayer)
 		{
 			// Set the spawn point to origin as a default value
 			Vector3 spawnPoint = Vector3.zero;
@@ -81,7 +82,7 @@ public class Health : NetworkBehaviour {
 
 			// Set the player’s position to the chosen spawn point
 			transform.position = spawnPoint;
-            currentHealth = maxHealth;
+            
             m_isDead = false;
         }
 	}

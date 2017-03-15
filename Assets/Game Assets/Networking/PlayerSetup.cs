@@ -33,15 +33,27 @@ public class PlayerSetup : NetworkBehaviour {
 
 	public void UpdateName (int pNum)
 	{
+            if (isLocalPlayer) { 
             m_playerNum = pNum;
             if (m_playerNameText != null)
             {
                 m_playerNameText.enabled = true;
-                m_playerNameText.text = m_basename + " " + m_playerNum.ToString();
+                if (PlayerPrefsManager.GetPlayerName().Length > 0)
+                {
+                    m_playerNameText.text = PlayerPrefsManager.GetPlayerName();
+                }
+                else
+                {
+                    m_playerNameText.text = m_basename + " " + m_playerNum.ToString();
+                }
             }
-            if ((isLocalPlayer) && (FindObjectOfType<PlayerUI>() != null))
-            {
-                FindObjectOfType<PlayerUI>().SetPlayerName(m_basename + " " + m_playerNum.ToString());
+            }
+            if ((isLocalPlayer) && (FindObjectOfType<PlayerUI>() != null)) {
+                if (PlayerPrefsManager.GetPlayerName().Length > 0) {
+                    FindObjectOfType<PlayerUI>().SetPlayerName(PlayerPrefsManager.GetPlayerName());
+                } else {
+                    FindObjectOfType<PlayerUI>().SetPlayerName(m_basename + " " + m_playerNum.ToString());
+                }
             }
     }
 

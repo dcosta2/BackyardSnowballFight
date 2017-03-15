@@ -7,8 +7,9 @@ public class PlayerPrefsManager : MonoBehaviour {
 	const string MASTER_VOLUME_KEY = "master_volume";
 	const string DIFFICULTY_KEY = "difficulty";
 	const string LEVEL_KEY = "level_unlocked_";
-	
-	public static void Initialize () {
+    const string PLAYER_NAME = "player_name";
+
+    public static void Initialize () {
 		PlayerPrefs.DeleteAll();
 	}
 	
@@ -24,11 +25,22 @@ public class PlayerPrefsManager : MonoBehaviour {
 	public static float GetMasterVolume() {
 		return PlayerPrefs.GetFloat (MASTER_VOLUME_KEY);
 	}
-	// ------------------------ End Volume ---------------------------------
-	
-	
-	// ------------------------ Unlocks ------------------------------------
-	public static void UnlockLevel (int level) {
+    // ------------------------ End Volume ---------------------------------
+
+    // ------------------------ PlayerName ------------------------------------
+    public static void SetPlayerName(string playerName)
+    {
+            PlayerPrefs.SetString(PLAYER_NAME, playerName);
+    }
+
+    public static string GetPlayerName()
+    {
+        return PlayerPrefs.GetString(PLAYER_NAME);
+    }
+    // ------------------------ End PlayerName ---------------------------------
+
+    // ------------------------ Unlocks ------------------------------------
+    public static void UnlockLevel (int level) {
 		if (level <= SceneManager.sceneCountInBuildSettings - 1) {
 			PlayerPrefs.SetInt (LEVEL_KEY + level.ToString (), 1); // Use 1 for true
 		} else {
